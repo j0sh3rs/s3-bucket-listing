@@ -114,8 +114,8 @@ Note that this only disallows navigation to shallower directories, but __NOT__ a
 
 Use Amazon S3 permissions to set granular file permissions.
 
-#### BUCKET_URL variable
-Valid options = `''` (default) or your _bucket URL_, e.g.
+#### CLOUDFRONT_URL variable
+Valid options = `''` (default) or your _cloudfront URL_, e.g.
 
 `https://uuid.cloudfront.net` OR `https://your.cname.tld.com` (both http & https are valid)
 
