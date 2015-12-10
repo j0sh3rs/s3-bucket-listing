@@ -18,6 +18,10 @@ if (typeof S3B_ROOT_DIR == 'undefined') {
   var S3B_ROOT_DIR = '';
 }
 
+if (typeof CLOUDFRONT_URL == 'undefined' || CLOUDFRONT_URL!=true) {
+  var CLOUDFRONT_URL = '';
+}
+
 jQuery(function($) {
   getS3Data();
 });
@@ -124,7 +128,7 @@ function getInfoFromS3Data(xml) {
 //    files: ..
 //    directories: ..
 //    prefix: ...
-// } 
+// }
 function prepareTable(info) {
   var files = info.files.concat(info.directories)
     , prefix = info.prefix
@@ -151,19 +155,31 @@ function prepareTable(info) {
   jQuery.each(files, function(idx, item) {
     // strip off the prefix
     item.keyText = item.Key.substring(prefix.length);
-    if (item.Type === 'directory') {
-      if (S3BL_IGNORE_PATH) {
-        item.href = location.protocol + '//' + location.hostname + location.pathname + '?prefix=' + item.Key;
+    if (CLOUDFRONT_URL) {
+      if (item.Type === 'directory') {
+        if (S3BL_IGNORE_PATH) {
+          item.href = location.protocol + '//' + CLOUDFRONT_URL + location.pathname + '?prefix=' + item.Key;
+        } else {
+          item.href = item.keyText;
+        }
       } else {
-        item.href = item.keyText;
+        item.href = CLOUDFRONT_URL + '/' + encodeURIComponent(item.Key);
+        item.href = item.href.replace(/%2F/g, '/');
       }
-    } else {
-      item.href = BUCKET_URL + '/' + encodeURIComponent(item.Key);
-      item.href = item.href.replace(/%2F/g, '/');
-    }
-    var row = renderRow(item, cols);
-    content.push(row + '\n');
-  });
+    else {
+        if (S3BL_IGNORE_PATH) {
+          item.href = location.protocol + '//' + location.hostname + location.pathname + '?prefix=' + item.Key;
+        } else {
+          item.href = item.keyText;
+        }
+      } else {
+        item.href = BUCKET_URL + '/' + encodeURIComponent(item.Key);
+        item.href = item.href.replace(/%2F/g, '/');
+      }
+
+      var row = renderRow(item, cols);
+      content.push(row + '\n');
+    });
 
   return content.join('');
 }

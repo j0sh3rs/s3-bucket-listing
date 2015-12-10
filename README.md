@@ -25,6 +25,7 @@ Copy these 3 lines into the HTML file where you want the listing to show up:
       // var BUCKET_NAME = 'BUCKET';
       // var BUCKET_URL = 'https://BUCKET.s3-REGION.amazonaws.com';
       // var S3B_ROOT_DIR = 'SUBDIR_L1/SUBDIR_L2/';
+      // var CLOUDFRONT_URL = 'https://your.cname.here'
     </script>
 
     <!-- the JS to the do the listing -->
@@ -70,7 +71,7 @@ Valid options = `''` (default) or your _bucket name_, e.g.
 
 This option is designed to support access to S3 buckets in non-website mode,
 via both path-style and virtualhost-style access urls simultaneously, from the
-same index.html file. 
+same index.html file.
 
 > NOTE: It is *not* recommended to use both BUCKET_URL and BUCKET_NAME in the
 same index.html file.
@@ -79,7 +80,7 @@ See the [Amazon Documentation](
 http://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html) for details
 on the different url access formats.
 
-The tables below attempt to highlight how BUCKET_NAME affects 
+The tables below attempt to highlight how BUCKET_NAME affects
 configuration and use cases.
 
 *Without using BUCKET_NAME:*
@@ -112,6 +113,16 @@ This will disallow navigation shallower than your set directory.
 Note that this only disallows navigation to shallower directories, but __NOT__ access. Any person with knowledge of the existence of bucket XML listings will be able to manually access those files.
 
 Use Amazon S3 permissions to set granular file permissions.
+
+#### BUCKET_URL variable
+Valid options = `''` (default) or your _bucket URL_, e.g.
+
+`https://uuid.cloudfront.net` OR `https://your.cname.tld.com` (both http & https are valid)
+
+- Do __NOT__ put a trailing '/', e.g. `https://uuid.cloudfront.net/`
+
+This variable allows for a simple rewrite of the contents displayed in the index if you use
+Cloudfront as part of your distribution mechanism and want a branded URL.
 
 
 ## Four Valid Configurations
@@ -182,10 +193,10 @@ Mandatory settings:
 
 ## S3 website bucket permissions
 
-You must setup the S3 website bucket to allow public read access. 
+You must setup the S3 website bucket to allow public read access.
 
 * Grant `Everyone` the `List` and `View` permissions:
-![List & View permissions](https://f.cloud.github.com/assets/227505/2409362/46c90dbe-aaad-11e3-9dee-10e967763770.png) 
+![List & View permissions](https://f.cloud.github.com/assets/227505/2409362/46c90dbe-aaad-11e3-9dee-10e967763770.png)
  * Alternatively you can assign the following bucket policy if policies are your thing:
 
 ```
@@ -297,4 +308,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
